@@ -93,3 +93,5 @@ devops-dashboard/
 - `grafana-data.tar.gz`
 - `prometheus-data.tar.gz`
 
+# devops-dashboard
+“Docker Compose мониторинг: Prometheus, Grafana, Node Exporter, cAdvisor, Process Exporter”
