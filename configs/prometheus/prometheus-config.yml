@@ -1,0 +1,71 @@
+# Конфигурация Prometheus для DevOps Dashboard
+# Этот файл определяет, откуда Prometheus собирает метрики
+
+global:
+  # Интервал сбора метрик (каждые 15 секунд)
+  scrape_interval: 15s
+  # Интервал оценки правил
+  evaluation_interval: 15s
+  # Внешние лейблы (будут добавлены ко всем метрикам)
+  external_labels:
+    monitor: 'devops-dashboard'
+    environment: 'development'
+
+# Правила для алертов (загружаются из папки rules)
+rule_files:
+  - "rules/*.yml"
+
+# Настройки сбора метрик (scrape configs)
+scrape_configs:
+  # Метрики самого Prometheus
+  - job_name: 'prometheus'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['localhost:9090']
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Метрики хост-системы через Node Exporter
+  - job_name: 'node-exporter'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['node-exporter:9100']
+    metrics_path: /metrics
+    scrape_timeout: 10s
+    # Добавляем лейблы для идентификации
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'ubuntu-server'
+
+  # Метрики Docker контейнеров через cAdvisor
+  - job_name: 'cadvisor'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['cadvisor:8080']
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Метрики процессов через Process Exporter
+  - job_name: 'process-exporter'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['process-exporter:9256']
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Пример для добавления внешних сервисов
+  # - job_name: 'external-service'
+  #   scrape_interval: 60s
+  #   static_configs:
+  #     - targets: ['external-host:port']
+  #   basic_auth:
+  #     username: 'user'
+  #     password: 'password'
+
+# Настройки для отправки алертов (пока закомментировано)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - alertmanager:9093

@@ -1,0 +1,29 @@
+# Конфигурация Process Exporter
+# Определяет, какие процессы мониторить
+
+process_names:
+  # Мониторинг Docker процессов
+  - name: "{{.Comm}}"
+    cmdline:
+    - 'dockerd'
+    - 'containerd'
+    - 'docker-proxy'
+
+  # Мониторинг системных сервисов
+  - name: "{{.Comm}}"
+    cmdline:
+    - 'systemd'
+    - 'sshd'
+    - 'nginx'
+    - 'apache2'
+
+  # Мониторинг процессов по группам
+  - name: "docker-containers"
+    cmdline:
+    - 'docker-containerd-shim'
+
+  # Мониторинг Python приложений
+  - name: "python-apps"
+    cmdline:
+    - 'python'
+    - 'python3'

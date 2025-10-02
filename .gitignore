@@ -1,0 +1,16 @@
+# Logs
+*.log
+
+# Docker
+.env
+
+# Backup files
+backups/
+*.tmp
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+# Credentials
+.env
