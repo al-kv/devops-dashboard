@@ -1,6 +1,20 @@
 # DevOps Dashboard
 Мониторинговый стек с Prometheus, Grafana, Node Exporter, cAdvisor и Process Exporter в Docker Compose.
-
+## Архитектура
+```mermaid
+graph TD
+    User([Пользователь]) -->|Порт 3000| Grafana
+    User -->|Порт 9090| Prometheus
+    User -->|Порт 8080| cAdvisor
+    
+    Grafana -->|Запросы| Prometheus
+    Prometheus -->|Сбор метрик| NodeExporter[Node Exporter]
+    Prometheus -->|Сбор метрик| cAdvisor
+    Prometheus -->|Сбор метрик| ProcessExporter[Process Exporter]
+    
+    NodeExporter -.->|Данные ОС| Host((Хост Linux))
+    cAdvisor -.->|Данные Docker| Containers((Контейнеры))
+```
 ## Содержание
 - Требования
 - Структура проекта
